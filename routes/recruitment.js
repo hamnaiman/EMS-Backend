@@ -12,6 +12,7 @@ const {
   deleteJobRole,
   uploadCandidates,
   getCandidates,
+  getRelevantCandidates,
   updateCandidateStatus,
   deleteCandidate,
 } = require('../controllers/recruitmentController');
@@ -42,6 +43,9 @@ router.delete('/roles/:id', deleteJobRole);
 
 router.post('/roles/:id/upload', upload.array('cvs', 20), uploadCandidates);
 router.get('/roles/:id/candidates', getCandidates);
+
+// Must come before /candidates/:id — otherwise Express treats "relevant" as an :id value.
+router.get('/candidates/relevant', getRelevantCandidates);
 
 router.patch('/candidates/:id', updateCandidateStatus);
 router.delete('/candidates/:id', deleteCandidate);

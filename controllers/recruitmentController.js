@@ -184,3 +184,17 @@ exports.deleteCandidate = async (req, res, next) => {
     next(err);
   }
 };
+
+// GET /api/recruitment/candidates/relevant  (top relevant candidates across all roles)
+exports.getRelevantCandidates = async (req, res, next) => {
+  try {
+    const candidates = await Candidate.find({ relevant: true, status: { $ne: 'rejected' } })
+      .populate('jobRole', 'title')
+      .sort({ matchScore: -1, createdAt: -1 })
+      .limit(6);
+
+    res.status(200).json(candidates);
+  } catch (err) {
+    next(err);
+  }
+};
